@@ -38,7 +38,7 @@ def matches(r, s):
     return r.match(s) is not None
 
 
-def validate_fields(byr, iyr, eyr, hcl, ecl, pid, hgt, cid=None, p=None, **kwargs):
+def validate_fields(byr, iyr, eyr, hcl, ecl, pid, hgt, **kwargs):
     hgt_match  = height_regex.match(hgt)
     rules = ([
         matches(integer_regex(4), byr) and 1920 <= int(byr) <= 2002,
