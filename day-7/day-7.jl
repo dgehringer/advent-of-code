@@ -33,10 +33,12 @@ end
 
 sum(map(can_hold_bag, values(data)))
 
-data[needle]
-
 function bags_inside(needle)
     value = data[needle]
     value isa Number && return value
     sum(bag_count*bags_inside(bag)+bag_count for (bag, bag_count) ∈ value)
 end
+
+bags_inside(needle)
+
+
