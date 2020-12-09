@@ -3,7 +3,6 @@ import DataStructures: CircularBuffer
 
 content = readlines(open("input.txt"))
 
-content = readlines(open("input.txt"))
 stream = Stateful(map(l -> parse(Int, l), content))
 preamble_length = 25
 
@@ -19,7 +18,6 @@ function sums_to(preamble::CircularBuffer{Int}, num::Int)
     false
 end
 
-
 function check_stream(stream, preamble_length::Int)
     preamble = CircularBuffer{Int}(preamble_length)
     # initialize preamble
@@ -27,9 +25,7 @@ function check_stream(stream, preamble_length::Int)
         push!(preamble, number)
     end
     for number in stream
-        #println("$(number): ", map(rule-> rule(number), rules))
         !sums_to(preamble, number) && return number
-        # println(preamble)
         push!(preamble, number)
         
     end
@@ -46,7 +42,6 @@ function check_stream_range(stream, num)
     end
 end
 
-content = readlines(open("input.txt"))
 stream = map(l -> parse(Int, l), content)
 preamble_length = 25
 check_stream_range(stream, number)
