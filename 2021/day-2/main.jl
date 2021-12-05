@@ -19,7 +19,6 @@ operations = Dict(
 move(d::Direction, a::Int, pos) = operations[d](pos..., a)
 move(d::Tuple{Direction, Int}, pos) = move(d..., pos)
 
-
 commands = readlines("input.txt") .|> parse_command 
 
 final_position = foldr(move, reverse(commands); init=(0,0))

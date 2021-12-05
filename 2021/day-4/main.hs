@@ -25,13 +25,13 @@ computeScore bd lastn = lastn * sumUnmarked bd
 
 problem1 = do
     (numbers, boards) <- readBoards <$> readFile "input.txt"
-    let (final_boards, last_num) = foldl playBingo (boards, -1) numbers
-        winner_board = (head . filter isBingo) final_boards 
-    print $ computeScore winner_board last_num
+    let (finalBoards, lastNum) = foldl playBingo (boards, -1) numbers
+        winnerBoard = (head . filter isBingo) finalBoards 
+    print $ computeScore winnerBoard lastNum
 
 playBingo' b@(bds, c) n = if length bds == 1 then playBingo b n else (filter (not . isBingo) (map (markBoard n) bds), n)
 
 problem2 = do
     (numbers, boards) <- readBoards <$> readFile "input.txt"
-    let ([last_board], last_num) = foldl playBingo' (boards, -1) numbers
-    print $ computeScore last_board last_num
+    let ([lastBoard], lastNum) = foldl playBingo' (boards, -1) numbers
+    print $ computeScore lastBoard lastNum
