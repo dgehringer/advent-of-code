@@ -1,2 +1,3 @@
-# advent-of-code-2020
-My humble try to master the puzzles of AoC 2020
+# advent-of-code
+
+My humble try to master the puzzles of AoC 2020 and 2021
