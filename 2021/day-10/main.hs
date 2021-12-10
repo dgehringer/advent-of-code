@@ -1,27 +1,23 @@
 import Data.List (sort)
 import qualified Data.Map as M
 
-data ChunkState = Okay | Corrupted Char | Incomplete String deriving Eq
+data ChunkState =  Corrupted Char | Incomplete String deriving Eq
 
 isCorrupted (Corrupted _) = True
 isCorrupted _ = False
 
 brackets = M.fromList [('(', ')'), ('[',']'), ('{', '}'), ('<', '>')]
+closingBrackets = (map snd . M.assocs) brackets
 
 analyseChunk :: String  -> ChunkState
-analyseChunk s
-    | r == Incomplete [] = Okay
-    | otherwise = r
+analyseChunk = foldl matchBrackets (Incomplete [])
     where
-        matchBrackets Okay a = Incomplete [a]
         matchBrackets (Corrupted a) _ = Corrupted a
         matchBrackets (Incomplete []) a = Incomplete [a]
         matchBrackets (Incomplete r@(x:xs)) ch
             | M.member ch brackets = Incomplete (ch:r)
             | ch `elem` closingBrackets = if ch == (brackets M.! x) then Incomplete xs else Corrupted ch
             | otherwise = error "Illeagal character"
-        r = foldl matchBrackets Okay s
-        closingBrackets = (map snd . M.assocs) brackets
 
 autoComplete (Incomplete s@(x:xs)) = map (brackets M.!) s
 autoComplete _ = error "Can only autocomplete Incomplete chunks"
