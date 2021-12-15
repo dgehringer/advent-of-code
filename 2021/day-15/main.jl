@@ -1,5 +1,6 @@
 
 import DataStructures: PriorityQueue, enqueue!, dequeue!
+
 parse_int(c) = parse(Int ,c)
 
 parse_file(filename) = hcat(map(l -> map(parse_int, split(l, "")), readlines(filename))...)
