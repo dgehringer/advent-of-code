@@ -7,14 +7,11 @@ import collections.abc
 def transcribe(s):
     return ''.join(map(lambda c: bin(int(c, 16))[2:].zfill(4), s))
 
-
 def take(it, n):
     return ''.join(itertools.islice(it, n))
 
-
 def to_dec(s: str):
     return int(s, 2)
-
 
 def is_empty(it):
     peek = next(it, None)
@@ -26,7 +23,6 @@ def read_packet(stream):
     packet_parsers = {4: read_packet_literal}
     return packet_parsers.get(packet_type, read_packet_operator)(packet_version, packet_type, stream)
 
-
 def read_packet_literal(version, ptype, stream):
     curr_bit = None
     buf = io.StringIO()
@@ -35,12 +31,10 @@ def read_packet_literal(version, ptype, stream):
         buf.write(curr_bit[1:])
     return (version, ptype, to_dec(buf.getvalue()))
 
-
 def read_packet_operator(version, ptype, stream):
     length_type = to_dec(take(stream, 1))
     packet_parsers = {0: read_packet_operator_zero, 1: read_packet_operator_one}
     return packet_parsers.get(length_type)(version, ptype, stream)
-
 
 def read_packet_operator_zero(version, ptype, stream):
     packet_length = to_dec(take(stream, 15))
@@ -52,11 +46,9 @@ def read_packet_operator_zero(version, ptype, stream):
         empty, substream = is_empty(substream)
     return (version, ptype, packets)
 
-
 def read_packet_operator_one(version, ptype, stream):
     num_packets = to_dec(take(stream, 11))
     return (version, ptype, [read_packet(stream) for _ in range(num_packets)])
-
 
 def extract_version(packet):
     v, _, packtes = packet
@@ -79,6 +71,7 @@ op_codes = {
     6: reduction(lambda x, y: x < y, int),
     7: reduction(lambda x, y: x == y, int)
 }
+
 def evaluate_packet(packet):
     _, packet_type, packets = packet
     if packet_type != 4:
