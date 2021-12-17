@@ -11,14 +11,12 @@ def read_bounds(filename):
 def inverse_gauusian_sum(n):
     return np.amax(np.roots([1,-1,-2*n]))
 
-
-b = read_bounds('input.txt')
-
 def calc_max_y(b):
     # as x and y coordinates are indpedent we do not have to care about x. Moreover the max(y) is where at the last step we have dy = miny
     _, (miny, _) = b
     return int((miny +1)*miny/2)
 
+b = read_bounds('input.txt')
 print(calc_max_y(b))
 
 def in_bounds(x, y, b):
@@ -37,7 +35,7 @@ def trajectory(b, v0):
         y += dy
         dy -= 1
         dx = dx if dx == 0 else dx -1
-    return in_bounds(x, y, b)#, (x, y)
+    return in_bounds(x, y, b)
 
 def count_hits(b):
     (minx, maxx), (miny, _) = b
