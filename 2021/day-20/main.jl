@@ -31,6 +31,8 @@ end
 
 advance(image, i) = simulate(algo, image)
 
-final = foldl(advance, 1:50; init=img)
-
+final = foldl(advance, 1:2; init=img)
 println("Part 1: $(count(==('#'), final))")
+
+final = foldl(advance, 1:50; init=img)
+println("Part 2: $(count(==('#'), final))")
