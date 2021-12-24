@@ -20,7 +20,7 @@ end
 
 function num_cubes(c::NTuple{6, Int})
     (x1, x2, y1, y2, z1, z2) = c
-    (abs(x1-x2)) * (abs(y1-y2)+1) * (abs(z1-z2)+1)
+    (abs(x1-x2)+1) * (abs(y1-y2)+1) * (abs(z1-z2)+1)
 end
 
 function lighted_cubes(instructions)
@@ -31,7 +31,7 @@ function lighted_cubes(instructions)
         if mode
             dark_cubes = []
             for interb in map((cc) -> intersecting_box(cc, cube), counted_cubes)
-                !isnothing(interb) && append!(dark_cubes, [(true, interb...)])
+                !isnothing(interb) && push!(dark_cubes, (true, interb...))
             end
             lights += num_cubes(cube)
             lights -= lighted_cubes(dark_cubes)
