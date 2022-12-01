@@ -1,4 +1,6 @@
-use std::fs;
+mod helpers;
+
+use crate::helpers::fetch_input;
 
 fn parse_input(content: &str) -> Vec<usize>{
     content
@@ -21,7 +23,7 @@ fn part_two(calories_per_elf: &[usize]) {
 }
 
 fn main() {
-    let contents = fs::read_to_string("input.txt").expect("Could not read puzzle input");
+    let contents = fetch_input(2022, 1).expect("Could not load input");
     let mut calories_per_elf = parse_input(&contents);
     calories_per_elf.sort();
     part_one(&calories_per_elf);
