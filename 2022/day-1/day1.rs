@@ -6,9 +6,8 @@ fn parse_input(content: &str) -> Vec<usize>{
         .map(|elf_block|{
             elf_block
                 .split('\n')
-                .filter(|l| !l.is_empty())
-                .map(|l| l.parse::<usize>().expect("Failed to parse calories"))
-                .sum::<usize>()
+                .filter_map(|l| l.parse::<usize>().ok())
+                .sum()
         })
         .collect()
 }
