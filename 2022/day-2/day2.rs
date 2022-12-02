@@ -1,3 +1,4 @@
+
 type Strategy = Vec<(char, char)>;
 
 fn parse_input(content: &str) -> Strategy {
@@ -16,8 +17,8 @@ fn parse_input(content: &str) -> Strategy {
 
 fn game_score(elf: char, me: char, choose_me: fn(char, char) -> char) -> i32 {
     let me = choose_me(elf, me);
-    let choice_score = me as i32 - 'W' as i32;
-    let diff = me as i32 - elf as i32;
+    let choice_score = (me as u8 - 'W' as u8) as i32;
+    let diff = me as u8 - elf as u8;
     match diff {
         23 => choice_score + 3,
         24 => choice_score + 6,
