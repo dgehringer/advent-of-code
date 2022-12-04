@@ -13,7 +13,7 @@ fn slice_to_hashset(sl: &str) -> HashSet<char> {
     HashSet::from_iter(sl.chars())
 }
 
-fn part_one(backpacks: &Vec<&str>) {
+fn part_one(backpacks: &[&str]) {
     let splitted_backpacks: Vec<(&str, &str)> = backpacks
         .iter()
         .map(|&bp| bp.split_at(bp.len() / 2))
@@ -29,7 +29,7 @@ fn part_one(backpacks: &Vec<&str>) {
     println!("Part1 {:?}", final_score);
 }
 
-fn part_two(backpacks: &Vec<&str>) {
+fn part_two(backpacks: &[&str]) {
     let final_score: usize = backpacks
         .iter()
         .tuple_windows::<(_, _, _)>()
