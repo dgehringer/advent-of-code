@@ -46,17 +46,17 @@ def process_command(command: str, input_iter: Iterable[str], current_directory) 
                 _, name = entry.split(' ')
                 dirs.append(empty_directory(name, parent=current_directory))
             else:
-                size, name = entry.split(' ')
-                files[name] = int(size)
+                sz, name = entry.split(' ')
+                files[name] = int(sz)
         current_directory.files = files
         current_directory.directories = dirs
         return current_directory
 
 
-def read_fs(input_iter: str):
-    fs = empty_directory('/')
+def read_fs(input_iter: str) -> Directory:
+    root = empty_directory('/')
     input_iter = peekable(iter(input_iter.splitlines()[1:]))
-    current_directory = fs
+    current_directory = root
 
     while input_iter:
         command = next(input_iter, None)
@@ -64,19 +64,19 @@ def read_fs(input_iter: str):
             current_directory = process_command(command, input_iter, current_directory)
         else:
             break
-    return fs
+    return root
 
 
-def size(fs: Directory):
-    files_size = sum(fs.files.values())
-    dir_sizes = map(size, fs.directories)
+def size(d: Directory) -> int:
+    files_size = sum(d.files.values())
+    dir_sizes = map(size, d.directories)
     return files_size + sum(dir_sizes)
 
 
-def directories(fs: Directory):
-    yield fs
-    for d in fs.directories:
-        yield from directories(d)
+def directories(d: Directory) -> Iterable[Directory]:
+    yield d
+    for dd in d.directories:
+        yield from directories(dd)
 
 
 with open('input.txt') as h:
