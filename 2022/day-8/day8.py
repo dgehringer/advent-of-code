@@ -7,10 +7,6 @@ def parse_input(inp: str) -> np.ndarray:
     return np.array([list(map(int, line)) for line in inp.splitlines()])
 
 
-def array_and(*conditions: np.ndarray) -> bool:
-    return any(np.all(c) for c in conditions)
-
-
 def get_directions(i: int, j: int, grid: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     return grid[i, :j][::-1], grid[i, j+1:], grid[:i, j][::-1], grid[i+1:, j]
 
