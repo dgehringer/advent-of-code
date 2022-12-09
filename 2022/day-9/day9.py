@@ -41,7 +41,7 @@ def simulate(inst: Iterable[Instruction], length: int = 2):
                 dx, dy = diff(head, tail)
                 if abs(dx) > 1 or abs(dy) > 1:  # should move tail?
                     # make sure move vector points along dx and dy
-                    rope[i+1] = move(tail, (clamp(dx), clamp(dy)))
+                    tail = rope[i+1] = move(tail, (clamp(dx), clamp(dy)))
                     if i == length - 2:  # tail of the rope as index i-2
                         visited |= {tail}
     return visited
@@ -50,5 +50,5 @@ def simulate(inst: Iterable[Instruction], length: int = 2):
 with open('input.txt') as h:
     instructions = list(map(parse_line, h.read().splitlines()))
 
-print('Part 1:', len(simulate(instructions)) + 1)
-print('Part 2:', len(simulate(instructions, length=10)) + 1)
+print('Part 1:', len(simulate(instructions)))
+print('Part 2:', len(simulate(instructions, length=10)))
