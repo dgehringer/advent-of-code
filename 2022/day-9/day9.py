@@ -27,7 +27,7 @@ def clamp(a: int) -> int:
     return int(copysign(1, a)) if a else 0
 
 
-def simulate(inst: Iterable[Instruction], length: int = 2):
+def simulate(inst: Iterable[Instruction], length: int = 2) -> Set[Position]:
     rope = [(0, 0)] * length
     visited = {rope[-1]}
     directions = dict(L=(-1, 0), R=(1, 0), U=(0, 1), D=(0, -1))
