@@ -1,6 +1,6 @@
 
-import dataclasses
 import io
+import dataclasses
 from typing import *
 from functools import lru_cache, partial
 
