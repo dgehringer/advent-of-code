@@ -1,4 +1,3 @@
-use std::slice::Chunks;
 
 fn run_program(program: &str) {
     let mut register = 1_i32;
