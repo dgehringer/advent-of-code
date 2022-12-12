@@ -43,7 +43,7 @@ fn find_path(grid: &Grid, start: Point, end: Point) -> Option<usize> {
     let mut q: VecDeque<(Point, usize)> = VecDeque::new();
     q.push_front((start, 0_usize));
 
-    while q.len() != 0 {
+    while !q.is_empty() {
         let (loc, cost) = q.pop_front().unwrap();
         if loc == end {
             return Some(cost);
@@ -51,13 +51,14 @@ fn find_path(grid: &Grid, start: Point, end: Point) -> Option<usize> {
         if !seen.insert(loc) {
             continue;
         }
-        for (dy, dx) in vec![(-1, 0), (0, 1), (1, 0), (0, -1)] {
+        for (dy, dx) in &[(-1, 0), (0, 1), (1, 0), (0, -1)] {
             let (y, x) = loc;
             let (py, px) = (y + dy, x + dx);
-            if in_bounds(py, ny) && in_bounds(px, nx) {
-                if grid[py as usize][px as usize] <= 1 + grid[y as usize][x as usize] {
-                    q.push_back(((py, px), cost + 1))
-                }
+            if in_bounds(py, ny)
+                && in_bounds(px, nx)
+                && grid[py as usize][px as usize] <= 1 + grid[y as usize][x as usize]
+            {
+                q.push_back(((py, px), cost + 1))
             }
         }
     }
