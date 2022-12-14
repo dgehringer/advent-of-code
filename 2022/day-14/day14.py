@@ -54,7 +54,7 @@ def parse_input(inp: str, part_two=False) -> Board:
     if part_two:
         max_down += 2
         # bottom line does not need to be 2 * max_down
-        rocks |= make_line((500-max_down-5, max_down), (500 + max_down + 5, max_down))
+        rocks |= make_line((500-max_down-1, max_down), (500 + max_down + 1, max_down))
 
     min_right, _ = min(rocks, key=item(0))
     max_right, _ = max(rocks, key=item(0))
