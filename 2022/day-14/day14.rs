@@ -136,17 +136,6 @@ fn simulate(
     return sand;
 }
 
-fn draw_board(board: &Board) {
-    let (rocks, minp, maxp) = board;
-    for y in minp.1..=maxp.1 {
-        for x in minp.0..=maxp.0 {
-            let mut ch = if rocks.contains(&(x, y)) { '#' } else { '.' };
-            print!("{}", ch);
-        }
-        println!("");
-    }
-}
-
 fn main() {
     let contents = std::fs::read_to_string("input.txt").expect("Failed to read input!");
     let source = (500, 0);
