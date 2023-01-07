@@ -19,19 +19,15 @@ fn parse_input(content: &str) -> Elves {
 }
 
 fn plan(elf: Elf, directions: &[Elf], adjacent: &[Elf], elves: &Elves) -> Option<Elf> {
-    match directions
+    directions
         .iter()
-        .filter(|&dir| {
+        .find(|&dir| {
             ![Elf::new(0, 0), Elf::new(0, 1), Elf::new(0, -1)]
                 .into_iter()
                 .any(|x| elves.contains(&(elf + dir + dir * x)))
-                && adjacent.into_iter().any(|adj| elves.contains(&(elf + adj)))
+                && adjacent.iter().any(|adj| elves.contains(&(elf + adj)))
         })
-        .nth(0)
-    {
-        Some(d) => Some(elf + d),
-        None => None,
-    }
+        .map(|dir| elf + dir)
 }
 
 fn simulate(elves: &Elves) {
@@ -60,10 +56,10 @@ fn simulate(elves: &Elves) {
             .cloned()
             .map(|elf| plan(elf, &directions, &adjacent, &all_elves))
             .for_each(|planned_pos| {
-                if plans.contains_key(&planned_pos) {
-                    *plans.get_mut(&planned_pos).unwrap() += 1usize;
+                if let std::collections::hash_map::Entry::Vacant(e) = plans.entry(planned_pos) {
+                    e.insert(1usize);
                 } else {
-                    plans.insert(planned_pos, 1usize);
+                    *plans.get_mut(&planned_pos).unwrap() += 1usize;
                 }
             });
         let mut src = Elves::new();
@@ -81,7 +77,7 @@ fn simulate(elves: &Elves) {
             }
         }
 
-        if src.len() == 0 {
+        if src.is_empty() {
             println!("Part two: {}", round);
             break;
         }
