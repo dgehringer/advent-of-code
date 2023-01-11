@@ -4,8 +4,6 @@ use std::collections::HashMap;
 lazy_static! {
     static ref SNAFU_TO_DEC: HashMap<char, i64> =
         [('1', 1), ('2', 2), ('0', 0), ('-', -1), ('=', -2)].into();
-    static ref DEC_TO_SNAFU: HashMap<i64, char> =
-        { SNAFU_TO_DEC.iter().map(|(k, v)| (*v, *k)).collect() };
 }
 
 fn snafu_to_dec(snafu: &str) -> i64 {
