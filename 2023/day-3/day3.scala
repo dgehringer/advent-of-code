@@ -1,11 +1,6 @@
-
 import scala.io.Source
 
-
 type EngineMap = Vector[Vector[Char]]
-
-def parseEngineMap(lines: Iterator[String]): EngineMap =
-  lines.filterNot(_.isEmpty).map(_.toVector).toVector
 
 @inline
 def inBounds(v: Int, b: Int): Boolean = v >= 0 && v < b
@@ -20,39 +15,33 @@ def adjacentTiles(h: Int, w: Int)(y: Int, x: Int): Seq[(Int, Int)] =
     if inBounds(y + dy, h) && inBounds(x + dx, w)
   yield (y + dy, x + dx)
 
+extension (ls: List[String])
+  def get(pos: (Int, Int)): Char = ls(pos._1)(pos._2)
 
-def adjacentNumbers(engineMap: EngineMap): (Int, Int) =
-  val (h, w) = (engineMap.length, engineMap(0).length)
-  val symbols = engineMap.flatten.filterNot(c => c.isDigit || c == '.').toSet
-  val isGear = (pos: (Int, Int)) => engineMap(pos._1)(pos._2) == '*'
+def findNumbersAndSymbolPosition(engineMap: List[String], symbols: Set[Char]): List[(Int, (Int, Int))] =
+  assert(engineMap.nonEmpty)
+  val (h, w) = (engineMap.length, engineMap.head.length)
+
   val isSymbol = (c: Char) => symbols contains c
   val getAdjacentTiles = adjacentTiles(h, w)
-  var (partNumbers, currNum, symbol: Option[(Int, Int)]) = (List[Int](), Vector[Char](), None)
-  var gearRatios = Map[(Int, Int), List[Int]]().withDefaultValue(Nil)
-  for
-    y <- 0 until h
-    x <- 0 until w
-  do {
-    val char = engineMap(y)(x)
-    if char.isDigit then
-      currNum = currNum appended char
-      if symbol.isEmpty then
-        symbol = getAdjacentTiles(y, x).find(pos => isSymbol(engineMap(pos._1)(pos._2)))
-    if isSymbol(char) || char == '.' || x == w - 1 then
-      if symbol.isDefined && currNum.nonEmpty then
-        val number = charsToNum(currNum)
-        partNumbers = number :: partNumbers
-        if isGear(symbol.get) then
-          gearRatios = gearRatios updated(symbol.get, number :: gearRatios(symbol.get))
-      symbol = None
-      currNum = Vector()
-  }
-
-  val summedGearRatios = gearRatios.filter(_._2.length == 2).map((_, nums) => nums.product).sum
-  (partNumbers.reverse.sum, summedGearRatios)
+  engineMap.zipWithIndex.flatMap((line, y) =>
+    raw"\d+".r.findAllMatchIn(line).flatMap(m =>
+      val hasSymbol = (m.start until m.end).flatMap(x =>
+        getAdjacentTiles(y, x).find(pos => isSymbol(engineMap.get(pos)))
+      )
+      if hasSymbol.nonEmpty then Some((m.toString.toInt, hasSymbol.head)) else None
+    )
+  )
 
 @main
 def main(): Unit =
-  val engineMap = parseEngineMap(Source.fromFile("input.txt").getLines)
-  val (partOne, partTwo) = adjacentNumbers(engineMap)
+  val engineMap = Source.fromFile("input.txt").getLines.toList
+  val symbols = engineMap.flatten.filterNot(c => c.isDigit || c == '.').toSet
+  val numbers = findNumbersAndSymbolPosition(engineMap, symbols)
+  val partOne = numbers.map(_._1).sum
+  val partTwo = numbers
+    .filter((_, pos) => engineMap.get(pos) == '*') // only those adjacent to gears
+    .groupBy(_._2)
+    .filter(_._2.length == 2)
+    .map(_._2.map(_._1).product).sum
   println(s"Part one: $partOne, Part two: $partTwo")
