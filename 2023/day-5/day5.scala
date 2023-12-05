@@ -32,7 +32,7 @@ extension[T] (ls: List[T])
 
 case class Mapping(source: String, dest: String, ranges: Seq[MappingRange]):
   def mapSeed(v: Long): Long = ranges.find(r => inBounds(r._2, r._3, v)) match
-    case Some(range) => v + range._1 - range._2
+    case Some(range) => applyMappingRange(range, v)
     case None => v
 
   private def applyMappingRange(m: MappingRange, v: Long): Long = m._1 + v - m._2
