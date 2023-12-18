@@ -15,10 +15,9 @@ extension (p: Pos)
   def *(alpha: Long): Pos = (p.x * alpha, p.y * alpha)
 
 def parseInput(lines: Iterator[String]): List[Instruction] =
-  val matcher = raw"([LRUD])\s+(\d+)\s+\(#([0-9a-z]+)\)".r
   lines
     .toList
-    .flatMap(line => matcher.findFirstMatchIn(line))
+    .flatMap(raw"([LRUD])\s+(\d+)\s+\(#([0-9a-z]+)\)".r.findFirstMatchIn)
     .map(m => (directions(m.group(1)), m.group(2).toInt, m.group(3)))
 
 def processInstructions(instructions: List[Instruction]): Long =
