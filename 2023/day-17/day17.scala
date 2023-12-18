@@ -16,16 +16,11 @@ extension (f: Field)
   def width: Int       = f.head.length
   def end: Pos         = (height - 1, width - 1)
   def at(p: Pos): Byte = f(p._1)(p._2)
-  def inBounds(p: Pos): Boolean =
-    p._1 >= 0 && p._2 >= 0 && p._1 < height && p._2 < width
+  def inBounds(p: Pos): Boolean = p._1 >= 0 && p._2 >= 0 && p._1 < height && p._2 < width
 
 val directions: Set[Pos] = Set((1, 0), (-1, 0), (0, 1), (0, -1))
 
-def neighborsAlongDirection(f: Field, minStreak: Int, maxStreak: Int)(
-    heat: Int,
-    pos: Pos,
-    dir: Dir,
-): Iterable[(Int, Pos, Dir)] =
+def neighborsAlongDirection(f: Field, minStreak: Int, maxStreak: Int)(heat: Int, pos: Pos, dir: Dir): Iterable[(Int, Pos, Dir)] =
   (1 to maxStreak)
     .scanLeft((heat, pos, 0))((state, i) =>
       val (h, p, _) = state
@@ -33,19 +28,11 @@ def neighborsAlongDirection(f: Field, minStreak: Int, maxStreak: Int)(
       val heatAcc   = h + (if f inBounds npos then f at npos else 0)
       (heatAcc, npos, i),
     )
-    .filter((_, _, i) =>
-      i >= minStreak,
-    ) // sort out those steps below min streak
+    .filter((_, _, i) => i >= minStreak,) // sort out those steps below min streak
     .filter((_, p, _) => f inBounds p)
     .map((h, p, _) => (h, p, dir))
 
-def minimumHeatLossPath(
-    f: Field,
-    start: Pos,
-    end: Pos,
-    minStreak: Int,
-    maxStreak: Int,
-): Int =
+def minimumHeatLossPath(f: Field, start: Pos, end: Pos, minStreak: Int, maxStreak: Int): Int =
   val findNeighbors = neighborsAlongDirection(f, minStreak, maxStreak)
   val q    = mutable.PriorityQueue((0, start, (0, 0)))(using Ordering.by(-_._1))
   val seen = mutable.HashSet.empty[Entry]
@@ -65,7 +52,6 @@ def main(): Unit =
     Using(Source.fromFile("input.txt"))(src =>
       src.getLines().map(_.map(_.toString.toByte).toArray).toArray,
     ).get
-
   val partOne = minimumHeatLossPath(blocks, (0, 0), blocks.end, 1, 3)
   val partTwo = minimumHeatLossPath(blocks, (0, 0), blocks.end, 4, 10)
   println(s"Part one: $partOne, Part two: $partTwo")
