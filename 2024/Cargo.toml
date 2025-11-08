@@ -1,0 +1,12 @@
+[package]
+name = "aoc"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+reqwest = { version = "0.12.24", features = ["blocking"] }
+
+
+[[bin]]
+name = "day1"
+path = "src/day1.rs"
