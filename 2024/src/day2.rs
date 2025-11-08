@@ -23,28 +23,29 @@ fn classify(report: &Report) -> bool {
     !diffs
         .clone()
         .any(|diff| !(diff.abs() > 0 && diff.abs() <= 3))
-        && diffs.clone().fold(true, |acc, x| acc && x.signum() == sign)
+        && diffs.clone().all(|x| x.signum() == sign)
 }
 fn part1(reports: &Reports) -> i32 {
-    reports.iter().map(|report| if classify(report) { 1 } else { 0 }).sum()
+    reports
+        .iter()
+        .map(|report| if classify(report) { 1 } else { 0 })
+        .sum()
 }
 
 fn part2(reports: &Reports) -> i32 {
     reports
         .iter()
         .map(|report| {
-            if classify(report) {
-                1
-            } else {
-                if (0..report.len()).any(|index| {
+            if classify(report)
+                || (0..report.len()).any(|index| {
                     let mut modified = report.clone();
                     modified.remove(index);
                     classify(&modified)
-                }) {
-                    1
-                } else {
-                    0
-                }
+                })
+            {
+                1
+            } else {
+                0
             }
         })
         .sum()
@@ -53,6 +54,6 @@ fn part2(reports: &Reports) -> i32 {
 fn main() {
     let input = load_input(2024, 2, None);
     let parsed = parse_input(&input);
-    print!("Part 1: {:?}\n", part1(&parsed));
-    print!("Part 1: {:?}\n", part2(&parsed));
+    println!("Part 1: {:?}", part1(&parsed));
+    println!("Part 1: {:?}", part2(&parsed));
 }
