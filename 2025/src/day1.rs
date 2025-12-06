@@ -1,8 +1,6 @@
 
 mod input;
 
-use std::fs;
-use crate::input::load_input;
 
 type Instruction = (char, isize);
 

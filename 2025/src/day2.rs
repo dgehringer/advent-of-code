@@ -2,8 +2,6 @@ mod input;
 
 use crate::input::load_input;
 use itertools::Itertools;
-use std::fs;
-use std::ops::Range;
 
 type Instruction = (char, isize);
 

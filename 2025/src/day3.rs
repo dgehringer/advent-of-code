@@ -1,9 +1,6 @@
 mod input;
 
 use crate::input::load_input;
-use itertools::Itertools;
-use std::fs;
-use std::ops::Range;
 
 type Banks = Vec<Vec<u8>>;
 
@@ -27,7 +24,6 @@ fn joltage(banks: &Banks, batteries: usize) -> impl Iterator<Item = usize> {
             max_index += bank[max_index..(bank.len() - i)].iter().position(|&b| b == *max_battery).unwrap() + 1;
             jolt.push((*max_battery).to_string().chars().next().unwrap());
         }
-        println!("{}", jolt);
         jolt.parse::<usize>().unwrap()
     })
 }
